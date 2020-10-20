@@ -1,0 +1,71 @@
+
+/****** Object:  Table [dbo].[tbl_Order]    Script Date: 10/15/2020 9:51:58 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[tbl_Order](
+	[OrderId] [int] NOT NULL,
+	[Date] [datetime] NULL,
+	[note] [varchar](max) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[OrderId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[tbl_OrderDetails]    Script Date: 10/15/2020 9:51:59 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbl_OrderDetails](
+	[ProductId] [int] ,
+	[OrderId] [int] ,
+	[Units] [int] NULL,
+	[UnitPrice] [money] NULL
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[tbl_Products]    Script Date: 10/15/2020 9:51:59 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[tbl_Products](
+	[ProductId] [int] NOT NULL,
+	[Code] [varchar](50) NULL,
+	[Description] [varchar](100) NULL,
+	[Price] [money] NULL,
+	[note] [varchar](max) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ProductId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+ALTER TABLE [dbo].[tbl_Order] ADD  DEFAULT (getdate()) FOR [Date]
+GO
+ALTER TABLE [dbo].[tbl_OrderDetails]  WITH CHECK ADD FOREIGN KEY([OrderId])
+REFERENCES [dbo].[tbl_Order] ([OrderId])
+GO
+ALTER TABLE [dbo].[tbl_OrderDetails]  WITH CHECK ADD FOREIGN KEY([OrderId])
+REFERENCES [dbo].[tbl_Products] ([ProductId])
+GO
+
+alter table [tbl_OrderDetails] alter column [OrderId] int not null
+
+alter table [tbl_OrderDetails] alter column [ProductId] int not null
+
+ALTER TABLE [tbl_OrderDetails]
+  ADD CONSTRAINT _tbl_OrderDetails UNIQUE ([OrderId], [ProductId])

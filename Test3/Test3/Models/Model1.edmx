@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="masterModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tbl_Order">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="note" Type="varchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'master.dbo.tbl_OrderDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tbl_OrderDetails">
+          <Key>
+            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="Units" Type="int" />
+          <Property Name="UnitPrice" Type="money" />
+        </EntityType>
+        <EntityType Name="tbl_Products">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="Code" Type="varchar" MaxLength="50" />
+          <Property Name="Description" Type="varchar" MaxLength="100" />
+          <Property Name="Price" Type="money" />
+          <Property Name="note" Type="varchar(max)" />
+          <Property Name="Units" Type="int" />
+        </EntityType>
+        <Association Name="FK__tbl_Order__Order__1940BAED">
+          <End Role="tbl_Order" Type="Self.tbl_Order" Multiplicity="1" />
+          <End Role="tbl_OrderDetails" Type="Self.tbl_OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Order">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="tbl_OrderDetails">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_Order__Produ__1A34DF26">
+          <End Role="tbl_Products" Type="Self.tbl_Products" Multiplicity="1" />
+          <End Role="tbl_OrderDetails" Type="Self.tbl_OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Products">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="tbl_OrderDetails">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="masterModelStoreContainer">
+          <EntitySet Name="tbl_Order" EntityType="Self.tbl_Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Products" EntityType="Self.tbl_Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_OrderDetails" EntityType="Self.tbl_OrderDetails" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tbl_OrderDetails].[ProductId] AS [ProductId], 
+    [tbl_OrderDetails].[OrderId] AS [OrderId], 
+    [tbl_OrderDetails].[Units] AS [Units], 
+    [tbl_OrderDetails].[UnitPrice] AS [UnitPrice]
+    FROM [dbo].[tbl_OrderDetails] AS [tbl_OrderDetails]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__tbl_Order__Order__1940BAED" Association="Self.FK__tbl_Order__Order__1940BAED">
+            <End Role="tbl_Order" EntitySet="tbl_Order" />
+            <End Role="tbl_OrderDetails" EntitySet="tbl_OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_Order__Produ__1A34DF26" Association="Self.FK__tbl_Order__Produ__1A34DF26">
+            <End Role="tbl_Products" EntitySet="tbl_Products" />
+            <End Role="tbl_OrderDetails" EntitySet="tbl_OrderDetails" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="masterModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tbl_Order">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="note" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tbl_OrderDetails" Relationship="masterModel.FK__tbl_Order__Order__1940BAED" FromRole="tbl_Order" ToRole="tbl_OrderDetails" />
+        </EntityType>
+        <EntityContainer Name="masterEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbl_Order" EntityType="Self.tbl_Order" />
+          <EntitySet Name="tbl_OrderDetails" EntityType="masterModel.tbl_OrderDetails" />
+          <AssociationSet Name="FK__tbl_Order__Order__1940BAED" Association="masterModel.FK__tbl_Order__Order__1940BAED">
+            <End Role="tbl_Order" EntitySet="tbl_Order" />
+            <End Role="tbl_OrderDetails" EntitySet="tbl_OrderDetails" />
+          </AssociationSet>
+          <EntitySet Name="tbl_Products" EntityType="masterModel.tbl_Products" />
+          <AssociationSet Name="FK__tbl_Order__Produ__1A34DF26" Association="masterModel.FK__tbl_Order__Produ__1A34DF26">
+            <End Role="tbl_Products" EntitySet="tbl_Products" />
+            <End Role="tbl_OrderDetails" EntitySet="tbl_OrderDetails" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="tbl_OrderDetails">
+          <Key>
+            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="Units" Type="Int32" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="tbl_Order" Relationship="masterModel.FK__tbl_Order__Order__1940BAED" FromRole="tbl_OrderDetails" ToRole="tbl_Order" />
+          <NavigationProperty Name="tbl_Products" Relationship="masterModel.FK__tbl_Order__Produ__1A34DF26" FromRole="tbl_OrderDetails" ToRole="tbl_Products" />
+        </EntityType>
+        <Association Name="FK__tbl_Order__Order__1940BAED">
+          <End Type="masterModel.tbl_Order" Role="tbl_Order" Multiplicity="1" />
+          <End Type="masterModel.tbl_OrderDetails" Role="tbl_OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Order">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="tbl_OrderDetails">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="tbl_Products">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="note" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Units" Type="Int32" />
+          <NavigationProperty Name="tbl_OrderDetails" Relationship="masterModel.FK__tbl_Order__Produ__1A34DF26" FromRole="tbl_Products" ToRole="tbl_OrderDetails" />
+        </EntityType>
+        <Association Name="FK__tbl_Order__Produ__1A34DF26">
+          <End Type="masterModel.tbl_Products" Role="tbl_Products" Multiplicity="1" />
+          <End Type="masterModel.tbl_OrderDetails" Role="tbl_OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Products">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="tbl_OrderDetails">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="masterModelStoreContainer" CdmEntityContainer="masterEntities">
+          <EntitySetMapping Name="tbl_Order">
+            <EntityTypeMapping TypeName="masterModel.tbl_Order">
+              <MappingFragment StoreEntitySet="tbl_Order">
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="note" ColumnName="note" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_OrderDetails">
+            <EntityTypeMapping TypeName="masterModel.tbl_OrderDetails">
+              <MappingFragment StoreEntitySet="tbl_OrderDetails">
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Units" ColumnName="Units" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Products">
+            <EntityTypeMapping TypeName="masterModel.tbl_Products">
+              <MappingFragment StoreEntitySet="tbl_Products">
+                <ScalarProperty Name="Units" ColumnName="Units" />
+                <ScalarProperty Name="note" ColumnName="note" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
